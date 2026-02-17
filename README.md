@@ -1,13 +1,13 @@
-☕ Ventura-Coffee: UX Flow Design
+☕ ## Ventura-Coffee: UX Flow Design
 
 De la Norma Técnica a la Interfaz de Usuario.
 Transformación de la normativa NT-KAF-E:2024 en una experiencia digital fluida, segura y guiada.
 
-🎯 El Desafío
+🎯 ## El Desafío
 
 El objetivo principal fue traducir una norma técnica burocrática y fragmentada en un flujo de usuario donde el cumplimiento de los estándares de calidad y seguridad sea automático. El usuario final logra la excelencia en su café sin necesidad de leer manuales, gracias a un sistema de bloqueos inteligentes y jerarquía visual.
 
-🛠️ Metodología de Diseño (Proceso Iterativo)
+🛠️ ## Metodología de Diseño (Proceso Iterativo)
 
 1. Análisis de la Norma Técnica (NT-KAF-E:2024)
 
@@ -65,10 +65,10 @@ Componentes: ButtonPrimary, StatusBadge, WizardStep.
 
 Accesibilidad: Contraste certificado, tamaños de objetivo táctil optimizados y soporte de texto para iconos.
 
-🔄 Flujo de Usuario Resultante (Happy Path)
+🔄 ##Flujo de Usuario Resultante (Happy Path)
 
 Este diagrama representa cómo la interfaz guía al usuario a través de los puntos de control normativos:
-
+,,,
 graph TD
     Start((INICIO)) --> Auth[DEBE: B.1 Autenticación]
     Auth --> Water{Agua RC-01}
@@ -80,10 +80,10 @@ graph TD
     Extract --> Additives[Aditivos / No Cuchara Metálica B.4]
     Additives --> Eject[DEBE: Expulsar Cápsula B.3]
     Eject --> End((FIN))
-
+''
     style Block fill:#ff9999,stroke:#333,stroke-width:2px
     style Auth fill:#e1f5fe,stroke:#01579b
-
+,,,
 
 🚀 Conclusión
 
