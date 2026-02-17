@@ -46,49 +46,66 @@ const StatusBar = ({ status, userName, userLevel, currentStep, totalSteps }: Sta
     return (
         <div
             className={cn(
-                "flex items-center justify-between px-8 py-4 border-b border-border bg-card/60 backdrop-blur-sm"
+                // 🔧 RESPONSIVE: Padding y altura
+                "flex flex-col sm:flex-row items-start sm:items-center justify-between",
+                "px-3 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-5",
+                "border-b border-border bg-card/60 backdrop-blur-sm"
             )}
         >
-            <div className="flex items-center gap-4">
-                <h1 className="text-xl font-bold tracking-tight text-foreground">
+            {/* Izquierda: Logo + Status */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+                <h1 className={cn(
+                    "text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-foreground",
+                    "order-2 sm:order-1"
+                )}>
                     Ventura<span className="text-primary">-Coffee</span>
                 </h1>
-                <div className="h-5 w-px bg-border" />
-                <div
-                    className={cn(
-                        "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold",
-                        config.className
-                    )}
-                >
-                    <Icon size={16} />
-                    {config.label}
+
+                <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto order-1 sm:order-2">
+                    <div className="h-4 w-px sm:h-5 sm:w-px bg-border hidden sm:block" />
+
+                    <div
+                        className={cn(
+                            "flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg",
+                            "text-xs sm:text-sm lg:text-base font-semibold",
+                            config.className
+                        )}
+                    >
+                        <Icon size={14} className="sm:[size:16]" />
+                        <span className="truncate">{config.label}</span>
+                    </div>
                 </div>
             </div>
 
-            <div className="flex items-center gap-6">
-                {/* Step indicator */}
-                <div className="flex items-center gap-2">
+            {/* Derecha: Steps + User */}
+            <div className="flex items-center gap-3 sm:gap-4 sm:gap-6 w-full sm:w-auto mt-3 sm:mt-0">
+                {/* Step indicator RESPONSIVE */}
+                <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto justify-center sm:justify-start">
                     {Array.from({ length: totalSteps }, (_, i) => (
                         <div
                             key={i}
                             className={cn(
-                                "h-1.5 rounded-full transition-all duration-300",
+                                "h-1 sm:h-1.5 lg:h-2 rounded-full transition-all duration-300 flex-shrink-0",
                                 i < currentStep
-                                    ? "w-6 bg-primary"
+                                    ? "w-4 sm:w-6 lg:w-8 bg-primary"
                                     : i === currentStep
-                                        ? "w-8 bg-primary animate-pulse"
-                                        : "w-4 bg-muted"
+                                        ? "w-5 sm:w-8 lg:w-10 bg-primary animate-pulse"
+                                        : "w-3 sm:w-4 lg:w-6 bg-muted"
                             )}
                         />
                     ))}
                 </div>
 
+                {/* User info RESPONSIVE */}
                 {userName && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <User size={16} />
-                        <span>{userName}</span>
+                    <div className={cn(
+                        "flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm lg:text-base text-muted-foreground",
+                        "w-full sm:w-auto justify-center sm:justify-end mt-2 sm:mt-0"
+                    )}>
+                        <User size={14} className="sm:[size:16]" />
+                        <span className="truncate max-w-[120px] sm:max-w-none">{userName}</span>
                         {userLevel && (
-                            <span className="px-2 py-0.5 rounded-md bg-primary/15 text-primary text-xs font-semibold">
+                            <span className="px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-md bg-primary/15 text-primary text-xs sm:text-sm font-semibold whitespace-nowrap">
                                 Nivel {userLevel}
                             </span>
                         )}

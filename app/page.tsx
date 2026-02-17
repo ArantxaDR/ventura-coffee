@@ -67,7 +67,8 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-hidden">
+      {/* StatusBar */}
       {step > 0 && (
         <StatusBar
           status={machineStatus}
@@ -78,16 +79,33 @@ const Index = () => {
         />
       )}
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+      {/* Contenido principal RESPONSIVE */}
+      <div className="flex-1 flex flex-col overflow-hidden px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* Steps */}
         {step === 0 && <LoginStep onLogin={handleLogin} />}
         {step === 1 && <WaterCheckStep onValidated={handleWaterValidated} />}
         {step === 2 && <CapsuleSelectStep onSelect={handleCapsuleSelect} />}
         {step === 3 && <CupVerifyStep onSelect={handleCupSelect} />}
         {step === 4 && <ExtractionStep capsuleType={selectedCapsule} onReady={handleExtractionReady} />}
         {step === 5 && <FinalStep />}
-        {step === 6 && <CompletionStep onRestart={() => setStep(0)} />}
+        {step === 6 && (
+          <CompletionStep
+            onRestart={() => {
+              // 🔄 RESET COMPLETO
+              setStep(0);
+              setMachineStatus("off");
+              setUserName(undefined);
+              setUserLevel(undefined);
+              setWaterOk(false);
+              setSelectedCapsule(null);
+              setSelectedCup(null);
+              setExtractionReady(false);
+            }}
+          />
+        )}
       </div>
 
+      {/* Navegación RESPONSIVE */}
       {step > 0 && step < 6 && (
         <WizardNavigation
           showBack={step > 1}

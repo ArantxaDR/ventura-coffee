@@ -53,7 +53,6 @@ const NormativeMessage = ({ level, message }: NormativeMessageProps) => {
         >
             <Icon size={18} className="flex-shrink-0" />
             <span className="text-sm font-medium">{message}</span>
-            <span className="ml-auto text-xs font-bold opacity-70">{c.label}</span>
         </div>
     );
 };
