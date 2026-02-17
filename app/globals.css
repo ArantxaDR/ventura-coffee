@@ -1,26 +1,111 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #F8F7F6;
+  --bg-secondary: #FFFFFF;
+  --text-main: #1B140D;
+  --text-muted: #9A734C;
+  --brand-primary: #D47311;
+  --brand-surface: #ff7ED;
+  --status-success: #16A34A;
+  --status-error: #DC2626;
+  --status-warning: #F59E0B;
+  --status-info: #2563EB;
+  --compliance-must: #D97786;
+  --compliance-should: #3B82F6;
+  --compliance-could: #9A734C;
+  --font-primary: 'Inter', sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-main);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg-primary: #0a0a0a;
+    --text-main: #ededed;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-primary);
+}
+
+h1 {
+  font-family: var(--font-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+h2 {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.body-large {
+  font-family: var(--font-primary);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.body-small {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.status {
+  font-family: var(--font-secondary);
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+}
+
+.status-success {
+  color: var(--status-success);
+}
+
+.status-error {
+  color: var(--status-error);
+}
+
+.status-warning {
+  color: var(--status-warning);
+}
+
+.status-info {
+  color: var(--status-info);
+}
+
+.status-compliance-must {
+  color: var(--compliance-must);
+}
+
+.status-compliance-should {
+  color: var(--compliance-should);
+}
+
+.status-compliance-could {
+  color: var(--compliance-could);
 }
