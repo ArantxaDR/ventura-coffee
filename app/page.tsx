@@ -1,66 +1,105 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useCallback } from "react";
+import StatusBar from "./components/StatusBar";
+import WizardNavigation from "./components/WizardNavigation";
+import LoginStep from "./components/steps/LoginStep";
+import WaterCheckStep from "./components/steps/WaterCheckStep";
+import CapsuleSelectStep from "./components/steps/CapsuleSelectionStep";
+import CupVerifyStep from "./components/steps/CupVerifyStep";
+import ExtractionStep from "./components/steps/ExtractionStep";
+import FinalStep from "./components/steps/FinalStep";
+import CompletionStep from "./components/steps/CompletionStep";
+
+type MachineStatus = "off" | "heating" | "ready" | "error";
+
+const Index = () => {
+  const [step, setStep] = useState(0); // 0 = login, 1-5 = steps, 6 = completion
+  const [machineStatus, setMachineStatus] = useState<MachineStatus>("off");
+  const [userName, setUserName] = useState<string | undefined>();
+  const [userLevel, setUserLevel] = useState<number | undefined>();
+
+  // Validation states
+  const [waterOk, setWaterOk] = useState(false);
+  const [selectedCapsule, setSelectedCapsule] = useState<string | null>(null);
+  const [selectedCup, setSelectedCup] = useState<string | null>(null);
+  const [extractionReady, setExtractionReady] = useState(false);
+
+  const totalSteps = 6;
+
+  const handleLogin = (name: string) => {
+    setUserName(name);
+    setUserLevel(2);
+    setMachineStatus("heating");
+    setStep(1);
+    setTimeout(() => setMachineStatus("ready"), 3000);
+  };
+
+  const canProceed = (): boolean => {
+    switch (step) {
+      case 1: return waterOk;
+      case 2: return selectedCapsule !== null;
+      case 3: return selectedCup !== null;
+      case 4: return extractionReady;
+      default: return true;
+    }
+  };
+
+  const nextLabel = (): string => {
+    if (step === 4) return "Iniciar extracción";
+    if (step === 5) return "Completar";
+    return "Continuar";
+  };
+
+  const handleWaterValidated = useCallback((valid: boolean) => setWaterOk(valid), []);
+  const handleCapsuleSelect = useCallback((cap: string | null) => setSelectedCapsule(cap), []);
+  const handleCupSelect = useCallback((cup: string | null) => setSelectedCup(cup), []);
+  const handleExtractionReady = useCallback((ready: boolean) => setExtractionReady(ready), []);
+
+  const handleNext = useCallback(() => {
+    if (canProceed()) {
+      setStep((s) => Math.min(6, s + 1));
+    }
+  }, [canProceed]);
+
+  const handleBack = useCallback(() => {
+    setStep((s) => Math.max(1, s - 1));
+  }, []);
+
   return (
-
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="h-screen flex flex-col bg-gradient-to-br from-gray-50 to-white overflow-hidden">
+      {step > 0 && (
+        <StatusBar
+          status={machineStatus}
+          userName={userName}
+          userLevel={userLevel}
+          currentStep={step}
+          totalSteps={totalSteps}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      )}
+
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {step === 0 && <LoginStep onLogin={handleLogin} />}
+        {step === 1 && <WaterCheckStep onValidated={handleWaterValidated} />}
+        {step === 2 && <CapsuleSelectStep onSelect={handleCapsuleSelect} />}
+        {step === 3 && <CupVerifyStep onSelect={handleCupSelect} />}
+        {step === 4 && <ExtractionStep capsuleType={selectedCapsule} onReady={handleExtractionReady} />}
+        {step === 5 && <FinalStep />}
+        {step === 6 && <CompletionStep />}
+      </div>
+
+      {step > 0 && step < 6 && (
+        <WizardNavigation
+          showBack={step > 1}
+          onBack={handleBack}
+          onNext={handleNext}
+          nextDisabled={!canProceed()}
+          nextLabel={nextLabel()}
+          isLastStep={step === 5}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default Index;
