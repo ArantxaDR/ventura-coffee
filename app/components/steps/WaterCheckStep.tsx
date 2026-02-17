@@ -10,14 +10,26 @@ interface WaterCheckStepProps {
 }
 
 const WaterCheckStep = ({ onValidated }: WaterCheckStepProps) => {
-    const [waterLevel, setWaterLevel] = useState(35);
-    const isLow = waterLevel < 20;
+    const [waterLevel, setWaterLevel] = useState(0);
+
+    // Estados completos
+    const isEmpty = waterLevel === 0;
+    const isLow = waterLevel > 0 && waterLevel < 20;
     const isOk = waterLevel >= 20;
 
+    // ✅ Simulación inteligente para TODOS los casos
     useEffect(() => {
-        // Simulate water level rising
-        const timer = setTimeout(() => setWaterLevel(72), 2000);
-        return () => clearTimeout(timer);
+        const timers: NodeJS.Timeout[] = [];
+
+        if (waterLevel === 0) {        // VACÍO → LLENO
+            timers.push(setTimeout(() => setWaterLevel(72), 2000));
+        } else if (waterLevel < 20) {  // BAJO → MEDIO → LLENO
+            timers.push(setTimeout(() => setWaterLevel(35), 1000));
+            timers.push(setTimeout(() => setWaterLevel(72), 2500));
+        }
+        // Si ≥20 ya está OK
+
+        return () => timers.forEach(clearTimeout);
     }, []);
 
     useEffect(() => {
@@ -25,73 +37,109 @@ const WaterCheckStep = ({ onValidated }: WaterCheckStepProps) => {
     }, [isOk, onValidated]);
 
     return (
-        <div className="flex-1 flex items-center justify-center animate-slide-up">
-            <div className="w-full max-w-lg space-y-10">
-                <div className="text-center space-y-2">
-                    <h2 className="text-3xl font-bold text-foreground">Paso 1 de 5</h2>
-                    <p className="text-xl text-muted-foreground">Verificar nivel de agua</p>
+        <div className="flex-1 flex flex-col items-center justify-center animate-slide-up px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-6 sm:space-y-8 lg:space-y-10">
+
+                {/* Header RESPONSIVE */}
+                <div className="text-center space-y-2 sm:space-y-3">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground tracking-tight">
+                        Paso 1 de 5
+                    </h2>
+                    <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground">
+                        Verificar nivel de agua
+                    </p>
                 </div>
 
-                {/* Water tank visual */}
-                <div className="flex items-end justify-center gap-8">
-                    <div className="relative w-32 h-56 rounded-2xl border-2 border-border bg-card overflow-hidden shadow-xl">
-                        {/* Water fill */}
+                {/* Tanque + Info RESPONSIVE */}
+                <div className="flex flex-col sm:flex-row items-center sm:items-end justify-center gap-4 sm:gap-8 w-full">
+
+                    {/* Water tank RESPONSIVE */}
+                    <div className={cn(
+                        "relative w-28 sm:w-32 lg:w-36 h-48 sm:h-56 lg:h-64",
+                        "rounded-2xl border-2 border-border bg-card overflow-hidden shadow-xl"
+                    )}>
+                        {/* Water fill con TODOS los estados */}
                         <div
                             className={cn(
                                 "absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out rounded-b-xl animate-pulse",
-                                isLow ? "bg-destructive/40" : "bg-blue-500/30"
+                                isEmpty ? "bg-destructive/30"
+                                    : isLow ? "bg-destructive/40"
+                                        : "bg-blue-500/30"
                             )}
                             style={{ height: `${waterLevel}%` }}
                         >
                             <div className={cn(
                                 "absolute inset-0 animate-pulse",
-                                isLow ? "bg-destructive/20" : "bg-blue-500/10"
+                                isEmpty ? "bg-destructive/20"
+                                    : isLow ? "bg-destructive/20"
+                                        : "bg-blue-500/10"
                             )} />
                         </div>
 
-                        {/* MIN / MAX markers */}
-                        <div className="absolute left-0 right-0 bottom-[20%] border-t-2 border-dashed border-destructive/50 px-2">
-                            <span className="absolute -top-5 right-2 text-xs font-bold text-destructive bg-background px-1 rounded">MIN</span>
+                        {/* MIN/MAX markers RESPONSIVE */}
+                        <div className="absolute left-0 right-0 bottom-[20%] border-t-2 border-dashed border-destructive/50 px-1 sm:px-2">
+                            <span className="absolute -top-4 sm:-top-5 right-1 sm:right-2 text-[10px] sm:text-xs font-bold text-destructive bg-background px-1 rounded whitespace-nowrap">
+                                MIN
+                            </span>
                         </div>
-                        <div className="absolute left-0 right-0 top-[10%] border-t-2 border-dashed border-blue-500/50 px-2">
-                            <span className="absolute -top-5 right-2 text-xs font-bold text-blue-500 bg-background px-1 rounded">MAX</span>
+                        <div className="absolute left-0 right-0 top-[10%] border-t-2 border-dashed border-blue-500/50 px-1 sm:px-2">
+                            <span className="absolute -top-4 sm:-top-5 right-1 sm:right-2 text-[10px] sm:text-xs font-bold text-blue-500 bg-background px-1 rounded whitespace-nowrap">
+                                MAX
+                            </span>
                         </div>
 
-                        {/* Icon */}
+                        {/* Icon RESPONSIVE con estados */}
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                             <Droplets
-                                size={36}
+                                size={28}
                                 className={cn(
-                                    "drop-shadow-sm",
-                                    isLow ? "text-destructive" : "text-blue-500"
+                                    "drop-shadow-sm transition-colors duration-500",
+                                    isEmpty || isLow ? "text-destructive" : "text-blue-500"
                                 )}
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-4 pb-4 text-center">
+                    {/* Datos numéricos RESPONSIVE */}
+                    <div className="space-y-3 sm:space-y-4 text-center sm:text-left">
                         <div className={cn(
-                            "text-5xl font-bold drop-shadow-md",
-                            isLow ? "text-destructive" : "text-blue-500"
+                            "text-4xl sm:text-5xl lg:text-6xl font-bold drop-shadow-md tracking-tight",
+                            isEmpty || isLow ? "text-destructive" : "text-blue-500"
                         )}>
                             {waterLevel}%
                         </div>
+
+                        {/* 🆕 Status con TODOS los textos */}
                         <div className={cn(
-                            "text-sm font-medium px-3 py-1 rounded-lg",
-                            isLow
-                                ? "bg-destructive/10 text-destructive border border-destructive/20"
-                                : "bg-blue-500/10 text-success border border-blue-500/20"
+                            "text-sm sm:text-base lg:text-lg font-medium px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-sm",
+                            isEmpty
+                                ? "bg-destructive/20 text-destructive border-2 border-destructive/40 animate-pulse"
+                                : isLow
+                                    ? "bg-destructive/15 text-destructive border-2 border-destructive/30"
+                                    : "bg-blue-500/15 text-success border-2 border-blue-500/30"
                         )}>
-                            {isLow ? "Nivel insuficiente" : "Nivel correcto"}
+                            {isEmpty ? "🚨 DEPÓSITO VACÍO"
+                                : isLow ? "⚠️ Nivel insuficiente"
+                                    : "✅ Nivel correcto"}
                         </div>
                     </div>
                 </div>
 
-                <div className="space-y-3">
-                    {isLow && (
-                        <NormativeMessage level="must" message="El depósito de agua está vacío. Rellénelo antes de continuar." />
+                {/* Normative RESPONSIVE con TODOS los casos */}
+                <div className="space-y-3 px-2 sm:px-0 w-full max-w-md mx-auto">
+                    {isEmpty && (
+                        <NormativeMessage
+                            level="must"
+                            message="🚨 DEPÓSITO COMPLETAMENTE VACÍO. Rellénelo antes de continuar."
+                        />
                     )}
-                    <NormativeMessage level="should" message="Utilice agua filtrada para mejor sabor." />
+                    {isLow && !isEmpty && (
+                        <NormativeMessage
+                            level="must"
+                            message="⚠️ Nivel CRÍTICO de agua. Rellene el depósito antes de continuar."
+                        />
+                    )}
+                    <NormativeMessage level="should" message="💧 Utilice agua filtrada para mejor sabor." />
                 </div>
             </div>
         </div>
