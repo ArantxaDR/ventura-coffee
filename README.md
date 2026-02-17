@@ -3,6 +3,10 @@
 **De la Norma Técnica a la Interfaz de Usuario.**  
 Transformación de la normativa **NT-KAF-E:2024** en una experiencia digital fluida, segura y guiada.
 
+Para iniciar el proyecto se puede clonar y despplegar en local (npm install, npm run dev) o usar la url de despliegue (https://ventura-coffee.vercel.app).
+
+En el Login no hace falta ningún código especial, ya que no se ha implementado un control real del usuario. Simplemente con teclear 4 dígitos es más que suficiente para que nos deje continuar.
+
 ---
 
 ## 🎯 El Desafío
