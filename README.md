@@ -1,74 +1,110 @@
-☕ ## Ventura-Coffee: UX Flow Design
+# ☕ Ventura-Coffee: UX Flow Design  
 
-De la Norma Técnica a la Interfaz de Usuario.
-Transformación de la normativa NT-KAF-E:2024 en una experiencia digital fluida, segura y guiada.
+**De la Norma Técnica a la Interfaz de Usuario.**  
+Transformación de la normativa **NT-KAF-E:2024** en una experiencia digital fluida, segura y guiada.
 
-🎯 ## El Desafío
+---
 
-El objetivo principal fue traducir una norma técnica burocrática y fragmentada en un flujo de usuario donde el cumplimiento de los estándares de calidad y seguridad sea automático. El usuario final logra la excelencia en su café sin necesidad de leer manuales, gracias a un sistema de bloqueos inteligentes y jerarquía visual.
+## 🎯 El Desafío
 
-🛠️ ## Metodología de Diseño (Proceso Iterativo)
+El objetivo principal fue traducir una norma técnica burocrática y fragmentada en un flujo de usuario donde el cumplimiento de los estándares de calidad y seguridad sea automático.
 
-1. Análisis de la Norma Técnica (NT-KAF-E:2024)
+El usuario final logra la excelencia en su café sin necesidad de leer manuales, gracias a un sistema de bloqueos inteligentes y jerarquía visual.
 
-Desglosamos el documento normativo para extraer la lógica operativa del sistema:
+---
 
-Fases Operativas: Identificación de 8 fases críticas (8.1-8.4 + Anexo B).
+## 🛠️ Metodología de Diseño (Proceso Iterativo)
 
-Mapeo de Riesgos (RC): * RC-01: Control de nivel de agua.
+### 1️⃣ Análisis de la Norma Técnica (NT-KAF-E:2024)
 
-RC-02: Gestión de precalentamiento.
+Desglose del documento normativo para extraer la lógica operativa del sistema:
 
-RC-03: Bloqueo de palanca de carga.
+#### 🔎 Fases Operativas
+Identificación de 8 fases críticas (8.1–8.4 + Anexo B).
 
-Semántica de Interfaz:
+#### ⚠️ Mapeo de Riesgos (RC)
+- **RC-01:** Control de nivel de agua  
+- **RC-02:** Gestión de precalentamiento  
+- **RC-03:** Bloqueo de palanca de carga  
 
-🔴 DEBE (Obligatorio): Bloqueo total de la UI hasta cumplimiento.
+#### 🎨 Semántica de Interfaz
+- 🔴 **DEBE (Obligatorio):** Bloqueo total de la UI hasta cumplimiento  
+- 🟡 **DEBERÍA (Recomendado):** Notificaciones y sugerencias visuales  
+- 🔵 **PUEDE (Opcional):** Personalización y preferencias  
 
-🟡 DEBERÍA (Recomendado): Notificaciones y sugerencias visuales.
+---
 
-🔵 PUEDE (Opcional): Personalización y preferencias.
+### 2️⃣ Desglose de Tareas UX
 
-2. Desglose de Tareas UX
+Traducción de requisitos normativos a 12 puntos de contacto accionables:
 
-Traducción de requisitos normativos a 12 puntos de contacto accionables, incluyendo:
+- Arquitectura tipo **Wizard** para guiar el proceso  
+- Copywriting enfocado en humanos (traducción de tecnicismos a instrucciones claras)  
+- Selector de cápsulas y volumen según el **Anexo A**  
 
-Arquitectura tipo Wizard para guiar el proceso.
+---
 
-Copywriting enfocado en humanos (traduciendo tecnicismos a instrucciones claras).
+### 3️⃣ Implementación Front-end (Arquitectura Técnica)
 
-Selector de cápsulas y volumen según el Anexo A.
+Preparación del entorno con **Next.js + TypeScript**
 
-3. Implementación Front-end (Arquitectura Técnica)
+#### 🧠 Máquina de Estados (FSM)
++10 estados lógicos:
 
-Preparación del entorno para Next.js + TypeScript:
+```
+OFF
+IDLE
+PREHEATING
+READY
+BREWING
+ERROR_RC01
+ERROR_RC02
+ERROR_RC03
+LOCKED
+COMPLETED
+```
 
-Máquina de Estados (FSM): Implementación de +10 estados lógicos (OFF, PREHEATING, ERROR_RC01, etc.).
+#### 🧩 Componentes Atómicos
+- `NivelAgua`
+- `SelectorCapsula`
+- `NormativeBanner`
 
-Componentes Atómicos: NivelAgua, SelectorCapsula, NormativeBanner.
+#### 🎨 Tokens Visuales
+Colores semánticos anclados a la criticidad normativa.
 
-Tokens Visuales: Colores semánticos anclados a la criticidad de la norma.
+---
 
-4. Layout & Estructura Visual
+### 4️⃣ Layout & Estructura Visual
 
-Diseño basado en una estructura de 3 zonas clave:
+Diseño basado en una estructura de **3 zonas clave**:
 
-Superior (Header): Estado de la máquina y feedback sistémico.
+| Zona | Función |
+|------|---------|
+| **Header (Superior)** | Estado de la máquina + feedback sistémico |
+| **Canvas (Central)** | Paso actual del flujo (foco principal) |
+| **Footer (Inferior)** | Navegación + advertencias normativas |
 
-Central (Canvas): El paso actual del flujo (foco principal).
+---
 
-Inferior (Footer): Acciones de navegación y banners de advertencia normativa.
+### 5️⃣ Design System & Accesibilidad
 
-5. Design System & Accesibilidad
+#### 🧱 Componentes Base
+- `ButtonPrimary`
+- `StatusBadge`
+- `WizardStep`
 
-Componentes: ButtonPrimary, StatusBadge, WizardStep.
+#### ♿ Accesibilidad
+- Contraste certificado  
+- Targets táctiles optimizados  
+- Soporte de texto alternativo para iconos  
 
-Accesibilidad: Contraste certificado, tamaños de objetivo táctil optimizados y soporte de texto para iconos.
+---
 
-🔄 ##Flujo de Usuario Resultante (Happy Path)
+# 🔄 Flujo de Usuario Resultante (Happy Path)
 
 Este diagrama representa cómo la interfaz guía al usuario a través de los puntos de control normativos:
-,,,
+
+```mermaid
 graph TD
     Start((INICIO)) --> Auth[DEBE: B.1 Autenticación]
     Auth --> Water{Agua RC-01}
@@ -80,14 +116,27 @@ graph TD
     Extract --> Additives[Aditivos / No Cuchara Metálica B.4]
     Additives --> Eject[DEBE: Expulsar Cápsula B.3]
     Eject --> End((FIN))
-''
+
     style Block fill:#ff9999,stroke:#333,stroke-width:2px
     style Auth fill:#e1f5fe,stroke:#01579b
-,,,
+```
 
-🚀 Conclusión
+---
 
-El resultado es una plataforma donde la tecnología actúa como el "guardián" del proceso. El usuario cumple con el 100% de la normativa técnica de forma orgánica, simplemente siguiendo un camino visualmente intuitivo y seguro.
+# 🚀 Conclusión
 
-Este proyecto forma parte del ecosistema de diseño de Ventura-Coffee.
+Ventura-Coffee demuestra que una norma técnica no tiene que ser un obstáculo para la experiencia de usuario.
 
+Mediante:
+- Arquitectura guiada
+- Bloqueos inteligentes
+- Estados explícitos
+- Semántica visual normativa
+
+Se logra una experiencia donde el cumplimiento es automático y la excelencia operativa es transparente para el usuario final.
+
+---
+
+## 🧠 Filosofía del Proyecto
+
+> "La mejor interfaz no es la que explica la norma, sino la que hace imposible incumplirla."
