@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { CircleArrowUp, CheckCircle2, Coffee } from "lucide-react";
+import { CircleArrowUp, CheckCircle2, Coffee, ArrowLeft } from "lucide-react";
 import NormativeMessage from "../NormativeMessage";
 import { cn } from "@/lib/utils";
 
-const CompletionStep = () => {
+interface CompletionStepProps {
+    onRestart: () => void; // ← Nuevo prop para volver al login
+}
+
+const CompletionStep = ({ onRestart }: CompletionStepProps) => {
     const [ejected, setEjected] = useState(false);
 
     return (
@@ -54,6 +58,7 @@ const CompletionStep = () => {
                     </div>
                 </div>
 
+                {/* Success message */}
                 {ejected && (
                     <div className={cn(
                         "text-center p-6 rounded-2xl shadow-2xl",
@@ -62,6 +67,23 @@ const CompletionStep = () => {
                         <CheckCircle2 size={40} className="text-emerald-500 mx-auto mb-3 animate-pulse" />
                         <p className="text-xl font-bold text-foreground">¡Disfrute su café!</p>
                         <p className="text-muted-foreground mt-1">Gracias por usar Ventura-Coffee</p>
+                    </div>
+                )}
+
+                {/* Restart button - Solo cuando cápsula expulsada */}
+                {ejected && (
+                    <div className="flex justify-center pt-6">
+                        <button
+                            onClick={onRestart}
+                            className={cn(
+                                "touch-target inline-flex items-center gap-3 px-8 py-3 rounded-2xl text-lg font-semibold transition-all shadow-md",
+                                "bg-muted text-muted-foreground border border-border hover:bg-primary/10 hover:text-primary hover:border-primary/50",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                            )}
+                        >
+                            <ArrowLeft size={20} />
+                            Nueva preparación
+                        </button>
                     </div>
                 )}
             </div>

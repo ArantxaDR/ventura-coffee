@@ -67,7 +67,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-gray-50 to-white overflow-hidden">
+    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
       {step > 0 && (
         <StatusBar
           status={machineStatus}
@@ -85,7 +85,7 @@ const Index = () => {
         {step === 3 && <CupVerifyStep onSelect={handleCupSelect} />}
         {step === 4 && <ExtractionStep capsuleType={selectedCapsule} onReady={handleExtractionReady} />}
         {step === 5 && <FinalStep />}
-        {step === 6 && <CompletionStep />}
+        {step === 6 && <CompletionStep onRestart={() => setStep(0)} />}
       </div>
 
       {step > 0 && step < 6 && (
