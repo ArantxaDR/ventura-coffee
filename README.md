@@ -7,6 +7,8 @@ Para iniciar el proyecto se puede clonar y despplegar en local (npm install, npm
 
 En el Login no hace falta ningún código especial, ya que no se ha implementado un control real del usuario. Simplemente con teclear 4 dígitos es más que suficiente para que nos deje continuar.
 
+Si en un futuro se requiere validación concreta, aplicarla es posible y fácil de implementar.
+
 ---
 
 ## 🎯 El Desafío
